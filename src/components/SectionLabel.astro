@@ -1,0 +1,15 @@
+---
+// Terminal-style eyebrow used above section headings: "$ projects".
+// The "$" is decorative, so screen readers skip it.
+interface Props {
+  text: string;
+}
+const { text } = Astro.props;
+---
+
+<p class="font-mono text-sm text-accent">
+  <span aria-hidden="true" class="select-none">
+    ${' '}
+  </span>
+  {text}
+</p>

@@ -1,0 +1,24 @@
+---
+import Container from './Container.astro';
+import SectionLabel from './SectionLabel.astro';
+
+interface Props {
+  id: string;
+  label: string;
+  title: string;
+}
+const { id, label, title } = Astro.props;
+const headingId = `${id}-heading`;
+---
+
+<section id={id} aria-labelledby={headingId} class="border-t border-line py-16 sm:py-20">
+  <Container>
+    <SectionLabel text={label} />
+    <h2 id={headingId} class="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">
+      {title}
+    </h2>
+    <div class="mt-8">
+      <slot />
+    </div>
+  </Container>
+</section>
