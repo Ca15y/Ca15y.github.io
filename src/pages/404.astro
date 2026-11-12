@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Container from '../components/Container.astro';
+import { url } from '../lib/url';
+---
+
+<BaseLayout title="Page not found" description="This page does not exist.">
+  <Container class="py-24 sm:py-32">
+    <p class="font-mono text-sm text-muted">
+      <span aria-hidden="true">$ </span>curl -I <span data-path>this-page</span>
+    </p>
+    <p class="mt-1 font-mono text-sm text-accent">HTTP/2 404</p>
+    <h1 class="mt-6 text-3xl font-semibold tracking-tight sm:text-4xl">Page not found</h1>
+    <p class="mt-4 max-w-xl text-muted">
+      The page you asked for is not here. It may have moved, or the link may be wrong.
+    </p>
+    <ul class="mt-8 flex flex-wrap gap-x-6 gap-y-2 font-mono text-sm">
+      <li>
+        <a class="text-accent" href={url()}>
+          Home
+        </a>
+      </li>
+      <li>
+        <a class="text-accent" href={url('projects/')}>
+          Projects
+        </a>
+      </li>
+    </ul>
+  </Container>
+</BaseLayout>
+
+<script is:inline>
+  // GitHub Pages serves this file for every missing URL, so read the path at runtime.
+  document.querySelector('[data-path]').textContent = location.pathname;
+</script>
