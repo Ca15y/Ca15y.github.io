@@ -6,23 +6,32 @@ const year = new Date().getFullYear();
 ---
 
 <footer class="mt-24 border-t border-line">
-  <Container class="flex flex-col gap-4 py-8 font-mono text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
+  <Container class="flex flex-col gap-4 py-8 font-mono text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
     <p>
       © {year} {owner.name} · {owner.location}
     </p>
-    <ul class="flex flex-wrap gap-x-5 gap-y-2">
+    <ul class="flex flex-wrap gap-x-5">
       <li>
-        <a class="text-muted transition-colors hover:text-text" href={owner.links.github}>
+        <a
+          class="inline-flex min-h-11 items-center text-muted transition-colors hover:text-text"
+          href={owner.links.github}
+        >
           GitHub
         </a>
       </li>
       <li>
-        <a class="text-muted transition-colors hover:text-text" href={owner.links.linkedin}>
+        <a
+          class="inline-flex min-h-11 items-center text-muted transition-colors hover:text-text"
+          href={owner.links.linkedin}
+        >
           LinkedIn
         </a>
       </li>
       <li>
-        <a class="text-muted transition-colors hover:text-text" href={`mailto:${owner.email}`}>
+        <a
+          class="inline-flex min-h-11 items-center text-muted transition-colors hover:text-text"
+          href={`mailto:${owner.email}`}
+        >
           Email
         </a>
       </li>

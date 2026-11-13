@@ -7,7 +7,7 @@ import { owner } from '../data/site';
 import { url } from '../lib/url';
 
 const btnBase =
-  'inline-flex items-center gap-2 rounded px-4 py-2.5 font-mono text-sm no-underline transition-colors';
+  'inline-flex min-h-11 items-center gap-2 rounded px-4 py-2.5 font-mono text-sm no-underline transition-colors';
 ---
 
 <BaseLayout>
@@ -20,11 +20,11 @@ const btnBase =
       </p>
       <h1
         id="hero-heading"
-        class="mt-5 max-w-3xl text-4xl leading-tight font-semibold tracking-tight text-balance sm:text-5xl"
+        class="mt-5 max-w-3xl text-[2rem] leading-tight font-semibold tracking-tight text-balance sm:text-5xl"
       >
         I build cloud infrastructure that lives in code and ships through pipelines, not by hand.
       </h1>
-      <p class="mt-6 max-w-2xl text-lg text-muted">
+      <p class="mt-6 max-w-[65ch] text-lg text-muted">
         Computer Science graduate working with AWS, Terraform, Docker, and GitHub Actions. I care
         about deployments that are repeatable, tested before they go out, and observable once they
         are running. Working toward SRE and infrastructure engineering.
@@ -46,19 +46,28 @@ const btnBase =
           Résumé (PDF)
         </a>
       </div>
-      <ul class="mt-8 flex flex-wrap gap-x-6 gap-y-2 font-mono text-sm" aria-label="Elsewhere">
+      <ul class="mt-6 flex flex-wrap gap-x-6 font-mono text-sm" aria-label="Elsewhere">
         <li>
-          <a class="text-muted transition-colors hover:text-accent" href={owner.links.github}>
+          <a
+            class="inline-flex min-h-11 items-center text-muted transition-colors hover:text-accent"
+            href={owner.links.github}
+          >
             GitHub
           </a>
         </li>
         <li>
-          <a class="text-muted transition-colors hover:text-accent" href={owner.links.linkedin}>
+          <a
+            class="inline-flex min-h-11 items-center text-muted transition-colors hover:text-accent"
+            href={owner.links.linkedin}
+          >
             LinkedIn
           </a>
         </li>
         <li>
-          <a class="text-muted transition-colors hover:text-accent" href={`mailto:${owner.email}`}>
+          <a
+            class="inline-flex min-h-11 items-center text-muted transition-colors hover:text-accent"
+            href={`mailto:${owner.email}`}
+          >
             {owner.email}
           </a>
         </li>

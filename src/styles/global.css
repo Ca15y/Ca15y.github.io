@@ -67,6 +67,10 @@
 
   --font-sans:
     'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  /* One shared rhythm for the only motion on the site: hover and focus colour changes. */
+  --default-transition-duration: 200ms;
+  --default-transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+
   --font-mono: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
@@ -74,8 +78,8 @@
   html {
     -webkit-text-size-adjust: 100%;
     text-rendering: optimizeLegibility;
-    /* Keep anchored headings clear of the sticky header (taller on mobile, where nav wraps). */
-    scroll-padding-top: 7.5rem;
+    /* The header is only sticky from 40rem up; below that, anchors need just a little air. */
+    scroll-padding-top: 1.5rem;
   }
 
   @media (min-width: 40rem) {
@@ -108,6 +112,11 @@
     outline: 2px solid var(--color-accent);
     outline-offset: 3px;
     border-radius: 2px;
+  }
+
+  button,
+  [role='button'] {
+    cursor: pointer;
   }
 
   a {
