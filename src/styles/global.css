@@ -27,6 +27,7 @@
   --accent-contrast: #0c0e10;
   --line: #23282d; /* decorative hairlines */
   --line-strong: #5a626b; /* UI component boundaries, >= 3:1 */
+  --ok: #6fcf97; /* status text: 9.5:1 on surface */
 }
 
 @media (prefers-color-scheme: light) {
@@ -40,6 +41,7 @@
     --accent-contrast: #fafaf7;
     --line: #e3e3dd;
     --line-strong: #8a9097;
+    --ok: #1f7a46;
   }
 }
 
@@ -53,6 +55,7 @@
   --accent-contrast: #fafaf7;
   --line: #e3e3dd;
   --line-strong: #8a9097;
+  --ok: #1f7a46;
 }
 
 @theme inline {
@@ -64,6 +67,7 @@
   --color-accent-contrast: var(--accent-contrast);
   --color-line: var(--line);
   --color-line-strong: var(--line-strong);
+  --color-ok: var(--ok);
 
   --font-sans:
     'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
