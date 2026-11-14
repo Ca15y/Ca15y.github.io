@@ -4,10 +4,22 @@ summary: An internal application designed and built for the Lagos State Internal
 headlineFacts:
   - 4 document types standardised
   - Batch input to print-ready PDF
-# TODO(israel): confirm the stack
-stack: []
+stack:
+  - TypeScript
+  - React
+  - Vite
+  - react-pdf
+  - pdf-lib
+  - Zod
+  - Vitest
+  - Playwright
+  - Cloudflare Workers
+  - GitHub Actions
 status: internal
-order: 3
+category: software
+order: 1
+links:
+  code: https://github.com/Ca15y/assessment-desk
 ---
 
-<!-- Case study body arrives in phase 2. No screenshots or code: built for internal government use. -->
+<!-- Words only: no screenshots or internal data. Repository is public (confirmed by owner, 2026-11-15). -->

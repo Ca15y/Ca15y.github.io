@@ -5,7 +5,9 @@ import Container from '../../components/Container.astro';
 import SectionLabel from '../../components/SectionLabel.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
 
-const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+const all = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+const devops = all.filter((p) => p.data.category === 'devops');
+const software = all.filter((p) => p.data.category === 'software');
 ---
 
 <BaseLayout title="Projects" description="Case studies of cloud, DevOps and automation work.">
@@ -16,10 +18,29 @@ const projects = (await getCollection('projects')).sort((a, b) => a.data.order -
       Each project is written up as a case study: the problem, what I built, the decisions and
       trade-offs, and what I would do next.
     </p>
-    <div class="mt-10 grid gap-4 md:grid-cols-2">
-      {projects.map((project, i) => (
-        <ProjectCard project={project} feature={i === 0} headingLevel="h2" />
-      ))}
-    </div>
+
+    <section aria-labelledby="devops-heading" class="mt-12">
+      <h2 id="devops-heading" class="font-mono text-sm text-muted">
+        cloud &amp; devops
+      </h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-2">
+        {devops.map((project, i) => (
+          <ProjectCard project={project} feature={i === 0} />
+        ))}
+      </div>
+    </section>
+
+    {software.length > 0 && (
+      <section aria-labelledby="software-heading" class="mt-14">
+        <h2 id="software-heading" class="font-mono text-sm text-muted">
+          other work: software
+        </h2>
+        <div class="mt-4 grid gap-4 md:grid-cols-2">
+          {software.map((project) => (
+            <ProjectCard project={project} />
+          ))}
+        </div>
+      </section>
+    )}
   </Container>
 </BaseLayout>

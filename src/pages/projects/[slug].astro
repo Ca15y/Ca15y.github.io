@@ -15,7 +15,7 @@ interface Props {
   project: CollectionEntry<'projects'>;
 }
 const { project } = Astro.props;
-const { title, summary, headlineFacts, stack } = project.data;
+const { title, summary, headlineFacts, stack, links } = project.data;
 ---
 
 <BaseLayout title={title} description={summary}>
@@ -45,6 +45,30 @@ const { title, summary, headlineFacts, stack } = project.data;
       <span class="mr-2 font-medium text-text">stack</span>
       {stack.length > 0 ? stack.join(' · ') : 'to be confirmed'}
     </p>
+    {(links.code || links.live) && (
+      <ul class="mt-6 flex flex-wrap gap-x-6 font-mono text-sm">
+        {links.live && (
+          <li>
+            <a
+              class="inline-flex min-h-11 items-center text-accent hover:text-text"
+              href={links.live}
+            >
+              Live site <span aria-hidden="true">&nbsp;↗</span>
+            </a>
+          </li>
+        )}
+        {links.code && (
+          <li>
+            <a
+              class="inline-flex min-h-11 items-center text-accent hover:text-text"
+              href={links.code}
+            >
+              Code on GitHub <span aria-hidden="true">&nbsp;↗</span>
+            </a>
+          </li>
+        )}
+      </ul>
+    )}
     <div class="mt-12">
       <Placeholder note="Phase 2: full case study (problem, architecture, what I built, decisions, next steps)." />
     </div>

@@ -12,7 +12,12 @@ const projects = defineCollection({
     /** Empty until the owner confirms it; the card then shows a TODO. */
     stack: z.array(z.string()),
     status: z.enum(['not-live', 'internal', 'live']),
-    /** Order on the home page; the first one is the wide feature card. */
+    /**
+     * devops: shown on the home page and first on /projects/.
+     * software: backend/app work, listed under "Other work" on /projects/ only.
+     */
+    category: z.enum(['devops', 'software']),
+    /** Order within its category; the first devops project is the wide feature card. */
     order: z.number().int(),
     links: z
       .object({

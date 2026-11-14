@@ -6,8 +6,10 @@ headlineFacts:
   - 'One workflow: test, build, deploy'
 stack: [Python, Flask, pytest, Docker, Nginx, AWS EC2, GitHub Actions]
 status: not-live
-order: 1
-# TODO(israel): add the repository URL as links.code
+category: devops
+order: 2
+links:
+  code: https://github.com/Ca15y/flask-cicd-pipeline
 ---
 
 <!-- Case study body (Summary, Problem, Architecture, ...) arrives in phase 2. -->
