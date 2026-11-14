@@ -1,0 +1,78 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { url } from '../lib/url';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  /** Wide card spanning the full grid row. */
+  feature?: boolean;
+  headingLevel?: 'h2' | 'h3';
+}
+
+const { project, feature = false, headingLevel: H = 'h3' } = Astro.props;
+const { title, summary, headlineFacts, stack, status } = project.data;
+
+const statusLabel = {
+  'not-live': 'Not live · code on GitHub',
+  internal: 'Internal · not public',
+  live: 'Live',
+}[status];
+---
+
+<article
+  class:list={[
+    'project-card relative flex flex-col gap-3.5 rounded-md border border-line bg-surface p-6 transition-colors hover:border-line-strong',
+    feature && 'md:col-span-full',
+  ]}
+>
+  <div class="flex flex-wrap items-center justify-between gap-2">
+    <span class="font-mono text-[0.8125rem] text-muted">{project.id}</span>
+    <span class="rounded-full border border-line-strong px-2.5 py-0.5 font-mono text-xs whitespace-nowrap text-muted">
+      {statusLabel}
+    </span>
+  </div>
+  <H class="text-xl font-semibold tracking-tight">
+    <a href={url(`projects/${project.id}/`)} class="card-link no-underline">
+      {title}
+    </a>
+  </H>
+  <p class="text-muted">{summary}</p>
+  <ul class:list={['grid gap-2', feature && 'sm:grid-cols-[repeat(auto-fit,minmax(14rem,1fr))]']}>
+    {headlineFacts.map((fact) => (
+      <li class="flex gap-2.5 text-[0.9375rem]">
+        <span class="font-mono text-accent" aria-hidden="true">
+          →
+        </span>
+        {fact}
+      </li>
+    ))}
+  </ul>
+  <p class="mt-auto border-t border-line pt-3.5 font-mono text-[0.8125rem] leading-relaxed text-muted">
+    <span class="mr-2 font-medium text-text">stack</span>
+    {stack.length > 0 ? stack.join(' · ') : <span class="text-accent">to be confirmed</span>}
+  </p>
+</article>
+
+<style>
+  /* Whole card is the click target: the heading link's ::after covers the card. */
+  .card-link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+  .card-link:focus-visible {
+    outline: none;
+  }
+  .card-link:focus-visible::after {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+  .project-card {
+    border-radius: 0.375rem;
+  }
+  .project-card:hover .card-link,
+  .card-link:focus-visible {
+    color: var(--accent);
+  }
+</style>

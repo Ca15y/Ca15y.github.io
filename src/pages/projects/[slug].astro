@@ -1,0 +1,52 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Container from '../../components/Container.astro';
+import SectionLabel from '../../components/SectionLabel.astro';
+import Placeholder from '../../components/Placeholder.astro';
+import { url } from '../../lib/url';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({ params: { slug: project.id }, props: { project } }));
+}
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+const { project } = Astro.props;
+const { title, summary, headlineFacts, stack } = project.data;
+---
+
+<BaseLayout title={title} description={summary}>
+  <Container class="py-16 sm:py-20">
+    <a
+      href={url('projects/')}
+      class="inline-flex min-h-11 items-center font-mono text-sm text-muted transition-colors hover:text-accent"
+    >
+      <span aria-hidden="true">←&nbsp;</span>All projects
+    </a>
+    <div class="mt-6">
+      <SectionLabel text={`cat ${project.id}.md`} />
+    </div>
+    <h1 class="mt-2 text-3xl font-semibold tracking-tight text-balance sm:text-4xl">{title}</h1>
+    <p class="mt-4 max-w-[65ch] text-lg text-muted">{summary}</p>
+    <ul class="mt-6 grid gap-2">
+      {headlineFacts.map((fact) => (
+        <li class="flex gap-2.5">
+          <span class="font-mono text-accent" aria-hidden="true">
+            →
+          </span>
+          {fact}
+        </li>
+      ))}
+    </ul>
+    <p class="mt-6 font-mono text-sm text-muted">
+      <span class="mr-2 font-medium text-text">stack</span>
+      {stack.length > 0 ? stack.join(' · ') : 'to be confirmed'}
+    </p>
+    <div class="mt-12">
+      <Placeholder note="Phase 2: full case study (problem, architecture, what I built, decisions, next steps)." />
+    </div>
+  </Container>
+</BaseLayout>
