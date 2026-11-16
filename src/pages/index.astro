@@ -8,6 +8,7 @@ import ProjectCard from '../components/ProjectCard.astro';
 import PipelineStrip from '../components/PipelineStrip.astro';
 import ExperienceList from '../components/ExperienceList.astro';
 import SkillGroups from '../components/SkillGroups.astro';
+import LabList from '../components/LabList.astro';
 import { getCollection } from 'astro:content';
 import { owner } from '../data/site';
 import { url } from '../lib/url';
@@ -117,8 +118,14 @@ const btnBase =
     <ExperienceList />
   </Section>
 
-  <Section id="labs" label="labs" title="Labs">
-    <Placeholder note="Phase 2: pinned GitHub repositories, pending owner approval." />
+  <Section
+    id="labs"
+    label="ls labs/"
+    title="Labs"
+    lede="Smaller builds and exercises, each focused on one tool or technique."
+    more={{ href: owner.links.github, text: 'More on GitHub' }}
+  >
+    <LabList />
   </Section>
 
   <Section id="skills" label="skills --list" title="Skills">

@@ -28,4 +28,16 @@ const projects = defineCollection({
   }),
 });
 
-export const collections = { projects };
+const labs = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/labs' }),
+  schema: z.object({
+    title: z.string(),
+    /** One sentence, taken from the repository README or description. */
+    description: z.string(),
+    stack: z.array(z.string()).min(1),
+    repo: z.url(),
+    order: z.number().int(),
+  }),
+});
+
+export const collections = { projects, labs };
