@@ -1,6 +1,6 @@
 ---
 title: AfriMart e-commerce platform on AWS
-summary: A five-service e-commerce app taken from Docker Compose to AWS. Terraform modules provision the network, database, cache, storage and an EKS cluster; Ansible configures the servers; Kubernetes manifests add health probes and autoscaling; and a Jenkins pipeline builds the images and pushes them to Amazon ECR.
+summary: Bloomy Technologies supplied a five-service e-commerce app; my part was taking it from Docker Compose to AWS. I wrote the Terraform modules for the network, database, cache, storage and an EKS cluster, the Ansible roles that configure the servers, the Kubernetes manifests with health probes and autoscaling, and the Jenkins pipeline that builds the images and pushes them to Amazon ECR.
 headlineFacts:
   - '6 Terraform modules: VPC, EC2, RDS, ElastiCache, S3, EKS'
   - Jenkins to ECR with no stored AWS keys (EC2 IAM role)
@@ -34,16 +34,15 @@ category: devops
 order: 3
 links:
   code: https://github.com/Ca15y/afrimart-ecommerce
-# TODO(israel): confirm the app code (React/Node) was supplied by the Bloomy Technologies
-# programme and that your part was the infrastructure, configuration and pipeline.
 ---
 
 ## Facts from the repository (draft notes for the phase 2 case study)
 
-Context: end-to-end DevOps assignment at Bloomy Technologies (STUDENT_ASSIGNMENT.md, 4 weeks). The
-application is described in PROJECT_GUIDE.md as built for DevOps training.
+Context: end-to-end DevOps assignment at Bloomy Technologies (STUDENT_ASSIGNMENT.md, 4 weeks).
+Confirmed by owner (2026-11-17): Bloomy supplied the application code; Israel's work was the
+infrastructure and pipeline (Terraform, Ansible, Kubernetes, Jenkins, ECR).
 
-- **Application:** React 18 + Vite frontend, Node.js/Express API, PostgreSQL (Sequelize), Redis for
+- **Application (supplied, not Israel's code):** React 18 + Vite frontend, Node.js/Express API, PostgreSQL (Sequelize), Redis for
   caching and sessions, Bull queue for email jobs, JWT auth, Multer uploads to S3, Winston logging,
   Prometheus metrics via prom-client (request duration histogram, request counter, active connections).
 - **Local:** docker-compose with postgres, redis, backend, frontend and nginx, each with a health check.
