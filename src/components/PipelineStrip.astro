@@ -8,12 +8,7 @@ import { pipelineGates } from '../data/site';
 >
   {pipelineGates.map((gate) => (
     <li class="flex items-center gap-2">
-      <span class="rounded border border-line-strong bg-surface px-2.5 py-1.5">
-        <span class="text-ok" aria-hidden="true">
-          ✓{' '}
-        </span>
-        {gate}
-      </span>
+      <span class="rounded border border-line-strong bg-surface px-2.5 py-1.5">{gate}</span>
       <span class="text-muted" aria-hidden="true">
         →
       </span>

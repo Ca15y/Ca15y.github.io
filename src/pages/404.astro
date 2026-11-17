@@ -4,7 +4,7 @@ import Container from '../components/Container.astro';
 import { url } from '../lib/url';
 ---
 
-<BaseLayout title="Page not found" description="This page does not exist.">
+<BaseLayout title="Page not found" description="This page does not exist." noindex>
   <Container class="py-24 sm:py-32">
     <p class="font-mono text-sm text-muted">
       <span aria-hidden="true">$ </span>curl -I <span data-path>this-page</span>

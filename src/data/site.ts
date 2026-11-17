@@ -114,7 +114,8 @@ export const skills: { group: string; items: string[] }[] = [
 
 /**
  * Quality gates shown in the colophon teaser, in pipeline order.
- * TODO(phase 3): these are planned; switch the teaser copy to present tense once the workflows exist.
+ * TODO(phase 3): these are planned; once the workflows exist, switch the teaser copy to present tense
+ * and mark passing gates in PipelineStrip (no ticks until then, so nothing claims a gate that isn't running).
  */
 export const pipelineGates = [
   'lint',

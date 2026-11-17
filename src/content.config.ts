@@ -9,7 +9,7 @@ const projects = defineCollection({
     summary: z.string(),
     /** Two or three short facts shown on the card. */
     headlineFacts: z.array(z.string()).min(1).max(3),
-    /** Empty until the owner confirms it; the card then shows a TODO. */
+    /** May be empty while the owner confirms it; the card then shows "to be confirmed". */
     stack: z.array(z.string()),
     status: z.enum(['not-live', 'internal', 'live']),
     /**

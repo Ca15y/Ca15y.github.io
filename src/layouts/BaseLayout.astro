@@ -10,9 +10,11 @@ interface Props {
   /** Page title; the site name is appended unless this is the home page. */
   title?: string;
   description?: string;
+  /** Error pages: no canonical URL and kept out of search results. */
+  noindex?: boolean;
 }
 
-const { title, description = site.description } = Astro.props;
+const { title, description = site.description, noindex = false } = Astro.props;
 const pageTitle = title ? `${title} · ${site.title}` : site.title;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 
@@ -41,7 +43,7 @@ const fontFaces = `
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
     <meta name="color-scheme" content="dark light" />
     <meta name="theme-color" content="#0c0e10" media="(prefers-color-scheme: dark)" />
     <meta name="theme-color" content="#fafaf7" media="(prefers-color-scheme: light)" />
