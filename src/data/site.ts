@@ -35,7 +35,6 @@ export const nav = [
   { label: 'Labs', href: '#labs' },
   { label: 'Skills', href: '#skills' },
   { label: 'Contact', href: '#contact' },
-  // TODO(israel): add public/resume.pdf — this link 404s until then.
   { label: 'Résumé', href: 'resume.pdf' },
 ] as const;
 
