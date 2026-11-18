@@ -25,6 +25,38 @@ const projects = defineCollection({
         live: z.url().optional(),
       })
       .default({}),
+
+    // Case-study sections. The Markdown body is "What I built".
+    /** One short paragraph: the situation and what had to change. */
+    problem: z.string(),
+    /** Top-to-bottom flow drawn as inline SVG by ArchitectureDiagram. */
+    architecture: z.object({
+      caption: z.string(),
+      tiers: z
+        .array(
+          z
+            .array(
+              z.object({
+                label: z.string().max(26),
+                detail: z.string().max(40).optional(),
+                /** Label on the arrow coming into this node. */
+                via: z.string().max(22).optional(),
+                accent: z.boolean().optional(),
+                dashed: z.boolean().optional(),
+                /** Indexes of the nodes in the tier above that point here; overrides the default wiring. */
+                from: z.array(z.number().int().min(0)).optional(),
+              }),
+            )
+            .min(1)
+            .max(3),
+        )
+        .min(2),
+    }),
+    /** Decision, then why. Empty until the owner supplies them; the page then says so. */
+    decisions: z.array(z.object({ decision: z.string(), why: z.string() })).default([]),
+    next: z.array(z.string()).default([]),
+    /** Optional line shown under the links, e.g. why there are no screenshots. */
+    note: z.string().optional(),
   }),
 });
 
