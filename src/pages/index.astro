@@ -2,13 +2,14 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Container from '../components/Container.astro';
 import Section from '../components/Section.astro';
-import Placeholder from '../components/Placeholder.astro';
 import WhoAmI from '../components/WhoAmI.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import PipelineStrip from '../components/PipelineStrip.astro';
 import ExperienceList from '../components/ExperienceList.astro';
 import SkillGroups from '../components/SkillGroups.astro';
 import LabList from '../components/LabList.astro';
+import EducationList from '../components/EducationList.astro';
+import ContactBlock from '../components/ContactBlock.astro';
 import { getCollection } from 'astro:content';
 import { owner } from '../data/site';
 import { url } from '../lib/url';
@@ -133,10 +134,10 @@ const btnBase =
   </Section>
 
   <Section id="education" label="education" title="Education and training">
-    <Placeholder note="Phase 2: BSc Computer Science (Babcock), AWS Cloud Practitioner Essentials (course)." />
+    <EducationList />
   </Section>
 
   <Section id="contact" label="contact" title="Get in touch">
-    <Placeholder note="Phase 2: availability statement, email, LinkedIn, GitHub, résumé." />
+    <ContactBlock />
   </Section>
 </BaseLayout>

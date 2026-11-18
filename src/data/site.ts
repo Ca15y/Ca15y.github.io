@@ -112,6 +112,27 @@ export const skills: { group: string; items: string[] }[] = [
   },
 ];
 
+export const education = [
+  {
+    title: 'BSc Computer Science',
+    org: 'Babcock University',
+    detail: 'Second Class Upper',
+    year: '2025',
+    kind: 'degree',
+  },
+  {
+    title: 'AWS Cloud Practitioner Essentials',
+    org: 'AWS Skill Builder',
+    detail: 'Training course',
+    year: undefined,
+    kind: 'course',
+  },
+] as const;
+
+export const contact = {
+  text: 'Open to junior and entry-level cloud, DevOps, and SRE roles, remote or Lagos-based, and to small infrastructure and automation projects.',
+} as const;
+
 /**
  * Quality gates shown in the colophon teaser, in pipeline order.
  * TODO(phase 3): these are planned; once the workflows exist, switch the teaser copy to present tense
