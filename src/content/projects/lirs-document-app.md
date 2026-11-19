@@ -34,7 +34,6 @@ architecture:
         detail: react-pdf; must be one A4 page
     - - label: download
         detail: PDF, ZIP of PDFs, or project file
-# TODO(israel): confirm the "why" lines below. The decisions come from docs/decisions.md and docs/architecture.md.
 decisions:
   - decision: Reject a document that overflows one A4 page instead of clipping or shrinking it.
     why: Clipped or shrunken output can look fine on screen and still be wrong on paper. Blocking the download makes the problem visible.

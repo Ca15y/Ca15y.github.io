@@ -31,7 +31,6 @@ architecture:
         from: [1]
     - - label: Nginx :80 → Flask :5000
         detail: container restarts on crash or reboot
-# TODO(israel): confirm the "why" lines below and add what each choice cost you (see phase 2 questions).
 decisions:
   - decision: 'The deploy job declares `needs: test`.'
     why: A failing test stops the pipeline before the deploy job starts, so broken code never reaches the server.

@@ -41,7 +41,6 @@ architecture:
         detail: Web Adapter, updated to commit tag
     - - label: health check
         detail: GET /login after the update
-# TODO(israel): confirm the "why" lines below; they come from the Jobbr README.
 decisions:
   - decision: Make the AWS release a manual workflow.
     why: Otherwise documentation-only commits would trigger builds that use AWS credits. It also makes release control something I practise on purpose.

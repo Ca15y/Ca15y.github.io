@@ -43,11 +43,9 @@ architecture:
         detail: port 6379, VPC only
       - label: S3
         detail: uploads bucket
-# TODO(israel): add the reasoning behind the other choices (see phase 2 questions).
 decisions:
   - decision: Push images to ECR with the Jenkins server's IAM role.
     why: The first version used stored credentials. With the instance role, no AWS keys live in Jenkins.
-# TODO(israel): confirm these. They come from gaps visible in the repository.
 next:
   - Make lint, test and the Trivy scans fail the build. They currently end in `|| true`, so they never stop it.
   - Replace the placeholder staging and production deploy stages, which only `echo`, with real deploys to EKS.
