@@ -24,6 +24,13 @@ const btnBase =
 ---
 
 <BaseLayout>
+  {/* DELIBERATELY BROKEN (gate test, do not merge) */}
+  <meta name="robots" content="noindex" />
+  <p id="dup">duplicate id</p><p id="dup">duplicate id</p>
+  <a href="/this-link-is-broken/">broken internal link</a>
+  <img src="/favicon.svg" />
+  <button></button>
+  <p style="color:#777;background:#888">low contrast text</p>
   <section aria-labelledby="hero-heading" class="py-16 sm:py-24">
     <Container class="grid items-center gap-10 lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)] lg:gap-12">
       <div class="min-w-0">

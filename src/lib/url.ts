@@ -9,3 +9,7 @@ export function url(path = ''): string {
   const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
   return base + path.replace(/^\//, '');
 }
+
+// DELIBERATELY BROKEN (gate test, do not merge)
+const unusedForLint = 1;   const   badlyFormatted   =   2
+export const wrongType: number = 'not a number';
