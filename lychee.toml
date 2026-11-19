@@ -2,7 +2,7 @@
 # Internal links are checked against the built files in dist/ (via --root-dir).
 
 # Check #anchors as well as pages.
-include_fragments = true
+include_fragments = "full"
 # Resolve directory links like /projects/ to their index.html.
 index_files = ["index.html"]
 
