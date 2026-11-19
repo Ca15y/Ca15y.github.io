@@ -55,7 +55,9 @@ const fontFaces = `
       try {
         const saved = localStorage.getItem('theme');
         if (saved === 'light' || saved === 'dark') document.documentElement.dataset.theme = saved;
-      } catch {}
+      } catch {
+        // Storage blocked: fall back to the system theme.
+      }
     </script>
   </head>
   <body class="flex min-h-screen flex-col">

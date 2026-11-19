@@ -46,7 +46,9 @@
       root.dataset.theme = next;
       try {
         localStorage.setItem('theme', next);
-      } catch {}
+      } catch {
+        // Storage can be blocked (private mode); the choice then lasts for this page only.
+      }
       sync();
     });
   });

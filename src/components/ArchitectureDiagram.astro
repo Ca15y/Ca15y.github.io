@@ -19,6 +19,9 @@ const { tiers, caption } = architecture;
 
 // Width follows the widest tier, so a straight single-column flow fits a phone without scrolling.
 const maxNodes = Math.max(...tiers.map((t) => t.length));
+// Wide diagrams scroll on phones: a labelled <section> makes the scroll area a keyboard-reachable region.
+const scrolls = maxNodes > 1;
+const Wrapper = scrolls ? 'section' : 'div';
 const W = maxNodes === 1 ? 340 : maxNodes === 2 ? 560 : 640;
 const GAP_X = 16;
 const NODE_H = 58;
@@ -69,14 +72,10 @@ const desc = tiers.map((tier, i) => `Step ${i + 1}: ${tier.map(describe).join(';
 ---
 
 <figure class="arch">
-  <div
+  <Wrapper
     class="overflow-x-auto rounded-md border border-line bg-bg p-4 sm:p-6"
-    {...(maxNodes > 1
-      ? {
-          tabindex: 0,
-          role: 'region',
-          'aria-label': 'Architecture diagram (scrolls sideways on small screens)',
-        }
+    {...(scrolls
+      ? { tabindex: 0, 'aria-label': 'Architecture diagram (scrolls sideways on small screens)' }
       : {})}
   >
     <svg
@@ -144,7 +143,7 @@ const desc = tiers.map((tier, i) => `Step ${i + 1}: ${tier.map(describe).join(';
         </g>
       ))}
     </svg>
-  </div>
+  </Wrapper>
   <figcaption class="mt-3 text-sm text-muted">{caption}</figcaption>
 </figure>
 
