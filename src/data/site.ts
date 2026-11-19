@@ -135,8 +135,8 @@ export const contact = {
 
 /**
  * Quality gates shown in the colophon teaser, in pipeline order.
- * TODO(phase 3): these are planned; once the workflows exist, switch the teaser copy to present tense
- * and mark passing gates in PipelineStrip (no ticks until then, so nothing claims a gate that isn't running).
+ * Each one is a job in .github/workflows/ci.yml. The strip shows no pass/fail marks, because a
+ * static page can't know the result of the latest run; the README's CI badge shows that.
  */
 export const pipelineGates = [
   'lint',
