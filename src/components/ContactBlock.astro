@@ -1,0 +1,30 @@
+---
+import { contact, owner } from '../data/site';
+import { url } from '../lib/url';
+
+const links = [
+  { label: 'Email', value: owner.email, href: `mailto:${owner.email}` },
+  { label: 'LinkedIn', value: 'linkedin.com/in/israel-cally15', href: owner.links.linkedin },
+  { label: 'GitHub', value: 'github.com/Ca15y', href: owner.links.github },
+  { label: 'Résumé', value: 'resume.pdf', href: url('resume.pdf') },
+];
+---
+
+<div class="grid gap-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:gap-12">
+  <p class="max-w-[50ch] text-lg">{contact.text}</p>
+  <dl class="grid grid-cols-[max-content_minmax(0,1fr)] items-center gap-x-6 font-mono text-sm">
+    {links.map((l) => (
+      <>
+        <dt class="text-muted">{l.label}</dt>
+        <dd class="min-w-0">
+          <a
+            href={l.href}
+            class="inline-flex min-h-11 items-center break-all text-accent transition-colors hover:text-text"
+          >
+            {l.value}
+          </a>
+        </dd>
+      </>
+    ))}
+  </dl>
+</div>

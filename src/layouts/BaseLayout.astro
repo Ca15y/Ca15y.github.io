@@ -4,7 +4,8 @@ import interLatin from '@fontsource-variable/inter/files/inter-latin-wght-normal
 import monoLatin from '@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2?url';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { site } from '../data/site';
+import { owner, site } from '../data/site';
+import { url } from '../lib/url';
 
 interface Props {
   /** Page title; the site name is appended unless this is the home page. */
@@ -12,11 +13,23 @@ interface Props {
   description?: string;
   /** Error pages: no canonical URL and kept out of search results. */
   noindex?: boolean;
+  /** Social preview image name, served from /og/<og>.png. */
+  og?: string;
+  /** Open Graph type: case studies are articles, everything else is a website. */
+  ogType?: 'website' | 'article';
 }
 
-const { title, description = site.description, noindex = false } = Astro.props;
+const {
+  title,
+  description = site.description,
+  noindex = false,
+  og = 'home',
+  ogType = 'website',
+} = Astro.props;
 const pageTitle = title ? `${title} · ${site.title}` : site.title;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL(url(`og/${og}.png`), Astro.site);
+const ogAlt = title ? `${title}, by ${owner.name}` : `${owner.name}, ${owner.title}`;
 
 // Latin subset only: the site is English, so the other subsets are never needed.
 const fontFaces = `
@@ -47,6 +60,25 @@ const fontFaces = `
     <meta name="color-scheme" content="dark light" />
     <meta name="theme-color" content="#0c0e10" media="(prefers-color-scheme: dark)" />
     <meta name="theme-color" content="#fafaf7" media="(prefers-color-scheme: light)" />
+    <link rel="sitemap" href={url('sitemap-index.xml')} />
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={owner.name} />
+    <meta property="og:title" content={title ?? site.title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogAlt} />
+    <meta property="og:locale" content="en_GB" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title ?? site.title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={ogAlt} />
+
     <link rel="icon" href={`${import.meta.env.BASE_URL}favicon.svg`} type="image/svg+xml" />
     <link rel="preload" href={interLatin} as="font" type="font/woff2" crossorigin />
     <style is:inline set:html={fontFaces} />
@@ -55,7 +87,9 @@ const fontFaces = `
       try {
         const saved = localStorage.getItem('theme');
         if (saved === 'light' || saved === 'dark') document.documentElement.dataset.theme = saved;
-      } catch {}
+      } catch {
+        // Storage blocked: fall back to the system theme.
+      }
     </script>
   </head>
   <body class="flex min-h-screen flex-col">

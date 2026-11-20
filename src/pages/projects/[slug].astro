@@ -1,9 +1,7 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Container from '../../components/Container.astro';
-import SectionLabel from '../../components/SectionLabel.astro';
-import Placeholder from '../../components/Placeholder.astro';
+import CaseStudy from '../../components/CaseStudy.astro';
 import { url } from '../../lib/url';
 
 export async function getStaticPaths() {
@@ -15,62 +13,38 @@ interface Props {
   project: CollectionEntry<'projects'>;
 }
 const { project } = Astro.props;
-const { title, summary, headlineFacts, stack, links } = project.data;
+const { title, summary, links, status, ...data } = project.data;
+const { Content } = await render(project);
+
+const statusText = {
+  'not-live': 'Not live right now. The code is on GitHub.',
+  internal: 'Internal tool.',
+  live: 'Live.',
+}[status];
+
+const linkList = [
+  ...(links.live ? [{ label: 'Live site', href: links.live }] : []),
+  ...(links.code ? [{ label: 'Code on GitHub', href: links.code }] : []),
+];
 ---
 
-<BaseLayout title={title} description={summary}>
-  <Container class="py-16 sm:py-20">
-    <a
-      href={url('projects/')}
-      class="inline-flex min-h-11 items-center font-mono text-sm text-muted transition-colors hover:text-accent"
-    >
-      <span aria-hidden="true">←&nbsp;</span>All projects
-    </a>
-    <div class="mt-6">
-      <SectionLabel text={`cat ${project.id}.md`} />
-    </div>
-    <h1 class="mt-2 text-3xl font-semibold tracking-tight text-balance sm:text-4xl">{title}</h1>
-    <p class="mt-4 max-w-[65ch] text-lg text-muted">{summary}</p>
-    <ul class="mt-6 grid gap-2">
-      {headlineFacts.map((fact) => (
-        <li class="flex gap-2.5">
-          <span class="font-mono text-accent" aria-hidden="true">
-            →
-          </span>
-          {fact}
-        </li>
-      ))}
-    </ul>
-    <p class="mt-6 font-mono text-sm text-muted">
-      <span class="mr-2 font-medium text-text">stack</span>
-      {stack.length > 0 ? stack.join(' · ') : 'to be confirmed'}
-    </p>
-    {(links.code || links.live) && (
-      <ul class="mt-6 flex flex-wrap gap-x-6 font-mono text-sm">
-        {links.live && (
-          <li>
-            <a
-              class="inline-flex min-h-11 items-center text-accent hover:text-text"
-              href={links.live}
-            >
-              Live site <span aria-hidden="true">&nbsp;↗</span>
-            </a>
-          </li>
-        )}
-        {links.code && (
-          <li>
-            <a
-              class="inline-flex min-h-11 items-center text-accent hover:text-text"
-              href={links.code}
-            >
-              Code on GitHub <span aria-hidden="true">&nbsp;↗</span>
-            </a>
-          </li>
-        )}
-      </ul>
-    )}
-    <div class="mt-12">
-      <Placeholder note="Phase 2: full case study (problem, architecture, what I built, decisions, next steps)." />
-    </div>
-  </Container>
+<BaseLayout title={title} description={summary} og={project.id} ogType="article">
+  <CaseStudy
+    id={project.id}
+    label={`cat ${project.id}.md`}
+    title={title}
+    status={statusText}
+    summary={summary}
+    headlineFacts={data.headlineFacts}
+    problem={data.problem}
+    architecture={data.architecture}
+    decisions={data.decisions}
+    next={data.next}
+    stack={data.stack}
+    links={linkList}
+    note={data.note}
+    back={{ href: url('projects/'), text: 'All projects' }}
+  >
+    <Content />
+  </CaseStudy>
 </BaseLayout>

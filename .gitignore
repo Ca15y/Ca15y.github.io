@@ -17,3 +17,9 @@ npm-debug.log*
 .vscode/*
 !.vscode/extensions.json
 .idea/
+
+# CI tool output
+.lighthouseci/
+test-results/
+playwright-report/
+lychee/
