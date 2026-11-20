@@ -168,7 +168,8 @@ jobs:
     name: Deploy to GitHub Pages
     # Main only, after every gate. PAGES_ENABLED is a repository variable the owner sets
     # once Pages is switched on (Settings → Pages → Source: GitHub Actions).
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && vars.PAGES_ENABLED == 'true'
+    # A manual run (Actions → CI → Run workflow) on main deploys too, so a deploy can be triggered by hand.
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main' && vars.PAGES_ENABLED == 'true'
     needs: [lint, typecheck, build, html, links, lighthouse, a11y]
     runs-on: ubuntu-latest
     timeout-minutes: 10
