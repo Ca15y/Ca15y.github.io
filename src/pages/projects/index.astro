@@ -1,0 +1,46 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Container from '../../components/Container.astro';
+import SectionLabel from '../../components/SectionLabel.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+
+const all = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+const devops = all.filter((p) => p.data.category === 'devops');
+const software = all.filter((p) => p.data.category === 'software');
+---
+
+<BaseLayout title="Projects" description="Case studies of cloud, DevOps and automation work.">
+  <Container class="py-16 sm:py-20">
+    <SectionLabel text="ls projects/" />
+    <h1 class="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">Projects</h1>
+    <p class="mt-3 max-w-[60ch] text-muted">
+      Each project is written up as a case study: the problem, what I built, the decisions and
+      trade-offs, and what I would do next.
+    </p>
+
+    <section aria-labelledby="devops-heading" class="mt-12">
+      <h2 id="devops-heading" class="font-mono text-sm text-muted">
+        cloud &amp; devops
+      </h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-2">
+        {devops.map((project, i) => (
+          <ProjectCard project={project} feature={i === 0} />
+        ))}
+      </div>
+    </section>
+
+    {software.length > 0 && (
+      <section aria-labelledby="software-heading" class="mt-14">
+        <h2 id="software-heading" class="font-mono text-sm text-muted">
+          other work: software
+        </h2>
+        <div class="mt-4 grid gap-4 md:grid-cols-2">
+          {software.map((project) => (
+            <ProjectCard project={project} />
+          ))}
+        </div>
+      </section>
+    )}
+  </Container>
+</BaseLayout>

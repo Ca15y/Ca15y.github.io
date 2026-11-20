@@ -1,0 +1,41 @@
+---
+import Container from './Container.astro';
+import SectionLabel from './SectionLabel.astro';
+
+interface Props {
+  id: string;
+  label: string;
+  title: string;
+  /** One-line intro under the heading. */
+  lede?: string;
+  /** Optional "see more" link shown at the right of the heading block. */
+  more?: { href: string; text: string };
+}
+const { id, label, title, lede, more } = Astro.props;
+const headingId = `${id}-heading`;
+---
+
+<section id={id} aria-labelledby={headingId} class="border-t border-line py-16 sm:py-20">
+  <Container>
+    <div class="flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
+      <div class="min-w-0">
+        <SectionLabel text={label} />
+        <h2 id={headingId} class="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">
+          {title}
+        </h2>
+        {lede && <p class="mt-2 max-w-[60ch] text-pretty text-muted">{lede}</p>}
+      </div>
+      {more && (
+        <a
+          href={more.href}
+          class="inline-flex min-h-11 items-center font-mono text-sm text-accent transition-colors hover:text-text"
+        >
+          {more.text} <span aria-hidden="true">&nbsp;→</span>
+        </a>
+      )}
+    </div>
+    <div class="mt-8">
+      <slot />
+    </div>
+  </Container>
+</section>

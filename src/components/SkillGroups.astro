@@ -1,0 +1,20 @@
+---
+import { skills } from '../data/site';
+---
+
+<dl class="grid gap-x-8 gap-y-6 sm:grid-cols-2">
+  {skills.map(({ group, items }) => (
+    <div class="min-w-0">
+      <dt class="mb-2 font-mono text-[0.8125rem] text-muted">{group}</dt>
+      <dd>
+        <ul class="flex flex-wrap gap-1.5">
+          {items.map((item) => (
+            <li class="rounded border border-line px-2 py-0.5 font-mono text-[0.8125rem]">
+              {item}
+            </li>
+          ))}
+        </ul>
+      </dd>
+    </div>
+  ))}
+</dl>

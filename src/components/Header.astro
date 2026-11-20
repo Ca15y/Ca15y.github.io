@@ -1,0 +1,43 @@
+---
+import Container from './Container.astro';
+import ThemeToggle from './ThemeToggle.astro';
+import { nav, owner } from '../data/site';
+import { url } from '../lib/url';
+
+const path = Astro.url.pathname;
+const isCurrent = (href: string) => !href.startsWith('#') && path.startsWith(url(href));
+---
+
+<header class="z-40 border-b border-line bg-bg/90 backdrop-blur sm:sticky sm:top-0">
+  <!--
+    Mobile: brand and theme toggle share the first row, nav gets its own full-width row.
+    From sm up: brand, nav and toggle sit on one line.
+  -->
+  <Container class="flex flex-wrap items-center justify-between gap-x-5 py-2 sm:py-4">
+    <a
+      href={url()}
+      class="inline-flex min-h-11 items-center font-mono text-sm font-medium text-text no-underline transition-colors hover:text-accent sm:min-h-0"
+    >
+      <span class="text-accent" aria-hidden="true">
+        ~/
+      </span>
+      {owner.name.toLowerCase()}
+    </a>
+    <nav aria-label="Main" class="order-last w-full sm:order-none sm:ml-auto sm:w-auto">
+      <ul class="flex flex-wrap items-center justify-between gap-x-3 font-mono text-sm sm:justify-start sm:gap-x-5">
+        {nav.map((item) => (
+          <li>
+            <a
+              href={url(item.href)}
+              aria-current={isCurrent(item.href) ? 'page' : undefined}
+              class="inline-flex min-h-11 items-center text-muted no-underline decoration-2 underline-offset-8 transition-colors hover:text-text aria-[current=page]:text-accent aria-[current=page]:underline sm:min-h-9"
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+    <ThemeToggle />
+  </Container>
+</header>

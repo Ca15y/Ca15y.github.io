@@ -1,0 +1,43 @@
+---
+import { getCollection } from 'astro:content';
+
+const labs = (await getCollection('labs')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<ul class="grid gap-x-8 md:grid-cols-2">
+  {labs.map((lab) => (
+    <li class="lab relative flex min-w-0 flex-col gap-1.5 border-t border-line py-5">
+      <h3 class="font-mono text-[0.9375rem] font-medium break-words">
+        <a href={lab.data.repo} class="lab-link no-underline transition-colors">
+          {lab.data.title}
+          <span class="text-muted" aria-hidden="true">
+            {' '}
+            ↗
+          </span>
+        </a>
+      </h3>
+      <p class="text-[0.9375rem] text-muted">{lab.data.description}</p>
+      <p class="font-mono text-[0.8125rem] text-muted">{lab.data.stack.join(' · ')}</p>
+    </li>
+  ))}
+</ul>
+
+<style>
+  /* The whole row opens the repository. */
+  .lab-link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+  .lab-link:focus-visible {
+    outline: none;
+  }
+  .lab-link:focus-visible::after {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .lab:hover .lab-link,
+  .lab-link:focus-visible {
+    color: var(--accent);
+  }
+</style>

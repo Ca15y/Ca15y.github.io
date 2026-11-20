@@ -1,0 +1,142 @@
+@import 'tailwindcss';
+
+/*
+ * Design tokens
+ * -------------
+ * Colours are defined once per theme as raw custom properties (--bg, --text, ...) and exposed to
+ * Tailwind through @theme, so utilities like `bg-bg` or `text-muted` follow
+ * the active theme automatically.
+ *
+ * Theme resolution:
+ *   1. Dark is the default.
+ *   2. If the OS prefers light and the visitor has not chosen, use light.
+ *   3. An explicit choice (data-theme on <html>) wins over both.
+ *
+ * Contrast (WCAG 2.1), checked against --color-bg:
+ *   dark:  text 15.9:1, muted 7.6:1, accent 10.5:1, strong border 3.1:1
+ *   light: text 17.0:1, muted 6.7:1, accent 6.1:1,  strong border 3.1:1
+ */
+
+:root {
+  color-scheme: dark;
+  --bg: #0c0e10;
+  --surface: #14171a;
+  --text: #e7e9ec;
+  --muted: #9ba3ad;
+  --accent: #f0b450;
+  --accent-contrast: #0c0e10;
+  --line: #23282d; /* decorative hairlines */
+  --line-strong: #5a626b; /* UI component boundaries, >= 3:1 */
+  --ok: #6fcf97; /* status text: 9.5:1 on surface */
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme='dark']) {
+    color-scheme: light;
+    --bg: #fafaf7;
+    --surface: #ffffff;
+    --text: #15181b;
+    --muted: #535a62;
+    --accent: #8a5300;
+    --accent-contrast: #fafaf7;
+    --line: #e3e3dd;
+    --line-strong: #8a9097;
+    --ok: #1f7a46;
+  }
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+  --bg: #fafaf7;
+  --surface: #ffffff;
+  --text: #15181b;
+  --muted: #535a62;
+  --accent: #8a5300;
+  --accent-contrast: #fafaf7;
+  --line: #e3e3dd;
+  --line-strong: #8a9097;
+  --ok: #1f7a46;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-contrast: var(--accent-contrast);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ok: var(--ok);
+
+  --font-sans:
+    'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  /* One shared rhythm for the only motion on the site: hover and focus colour changes. */
+  --default-transition-duration: 200ms;
+  --default-transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    /* The header is only sticky from 40rem up; below that, anchors need just a little air. */
+    scroll-padding-top: 1.5rem;
+  }
+
+  @media (min-width: 40rem) {
+    html {
+      scroll-padding-top: 5rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background-color: var(--accent);
+    color: var(--accent-contrast);
+  }
+
+  /* One focus style everywhere: visible, high contrast, offset from the element. */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  button,
+  [role='button'] {
+    cursor: pointer;
+  }
+
+  a {
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 1px;
+  }
+}
+
+/* Small hover/focus transitions only, and none for people who ask for less motion. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}

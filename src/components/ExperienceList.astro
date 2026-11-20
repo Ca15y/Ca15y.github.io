@@ -1,0 +1,23 @@
+---
+import { experience } from '../data/site';
+---
+
+<ol class="grid">
+  {experience.map((role) => (
+    <li class="grid gap-x-8 gap-y-1 border-t border-line py-6 first:border-t-0 first:pt-0 md:grid-cols-[11rem_minmax(0,1fr)]">
+      <p class="pt-0.5 font-mono text-[0.8125rem] text-muted tabular-nums">
+        <time datetime={role.start}>{role.dates.split(' – ')[0]}</time> –{' '}
+        <time datetime={role.end}>{role.dates.split(' – ')[1]}</time>
+      </p>
+      <div class="min-w-0">
+        <h3 class="text-[1.0625rem] font-semibold">{role.title}</h3>
+        <p class="mt-0.5 text-[0.9375rem] text-muted">{role.org}</p>
+        <ul class="mt-2.5 grid list-disc gap-1.5 pl-[1.1rem] text-[0.9375rem] text-muted marker:text-line-strong">
+          {role.points.map((point) => (
+            <li>{point}</li>
+          ))}
+        </ul>
+      </div>
+    </li>
+  ))}
+</ol>

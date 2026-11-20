@@ -1,0 +1,56 @@
+---
+// Dark by default, light when the OS asks for it. This button lets a visitor
+// override that; the choice is remembered in localStorage.
+---
+
+<button
+  type="button"
+  data-theme-toggle
+  class="inline-flex size-11 shrink-0 items-center justify-center rounded border border-line-strong text-muted transition-colors hover:border-accent hover:text-accent sm:size-9"
+>
+  <span class="sr-only" data-theme-label>
+    Switch theme
+  </span>
+  <svg
+    aria-hidden="true"
+    viewBox="0 0 24 24"
+    class="size-4"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.75"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <circle cx="12" cy="12" r="8"></circle>
+    <path d="M12 4a8 8 0 0 1 0 16Z" fill="currentColor"></path>
+  </svg>
+</button>
+
+<script>
+  const root = document.documentElement;
+  const prefersLight = window.matchMedia('(prefers-color-scheme: light)');
+  const current = () =>
+    (root.dataset.theme as 'light' | 'dark' | undefined) ??
+    (prefersLight.matches ? 'light' : 'dark');
+
+  function sync() {
+    const next = current() === 'dark' ? 'light' : 'dark';
+    document.querySelectorAll('[data-theme-label]').forEach((el) => {
+      el.textContent = `Switch to ${next} theme`;
+    });
+  }
+
+  document.querySelectorAll('[data-theme-toggle]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const next = current() === 'dark' ? 'light' : 'dark';
+      root.dataset.theme = next;
+      try {
+        localStorage.setItem('theme', next);
+      } catch {}
+      sync();
+    });
+  });
+
+  prefersLight.addEventListener('change', sync);
+  sync();
+</script>

@@ -1,0 +1,59 @@
+---
+import { owner } from '../data/site';
+
+const w = owner.whoami;
+const rows: [string, string][] = [
+  ['role', w.role],
+  ['based', w.based],
+  ['remote', w.remote],
+  ['heading', w.heading],
+];
+---
+
+<aside
+  aria-label="Summary"
+  class="min-w-0 rounded-md border border-line bg-surface font-mono text-[0.8125rem] leading-relaxed"
+>
+  <div
+    class="flex items-center gap-1.5 border-b border-line px-3 py-2 text-muted"
+    aria-hidden="true"
+  >
+    <span class="size-2 rounded-full bg-line-strong"></span>
+    <span class="size-2 rounded-full bg-line-strong"></span>
+    <span class="size-2 rounded-full bg-line-strong"></span>
+    <span class="ml-2">~ zsh</span>
+  </div>
+  <div class="overflow-x-auto px-4 pt-3.5 pb-4">
+    <p>
+      <span class="text-accent" aria-hidden="true">
+        ${' '}
+      </span>
+      whoami
+    </p>
+    <dl class="mt-1.5 mb-3 grid grid-cols-[max-content_minmax(0,1fr)] gap-x-3.5 gap-y-0.5">
+      {rows.map(([k, v]) => (
+        <>
+          <dt class="text-muted">{k}</dt>
+          <dd>{v}</dd>
+        </>
+      ))}
+    </dl>
+    <p>
+      <span class="text-accent" aria-hidden="true">
+        ${' '}
+      </span>
+      cat stack.txt
+    </p>
+    <p class="mt-1.5 mb-3 text-muted">{w.stack.join(' · ')}</p>
+    <p>
+      <span class="text-accent" aria-hidden="true">
+        ${' '}
+      </span>
+      status
+    </p>
+    <p class="mt-1.5 text-ok">
+      <span aria-hidden="true">● </span>
+      {w.status}
+    </p>
+  </div>
+</aside>
