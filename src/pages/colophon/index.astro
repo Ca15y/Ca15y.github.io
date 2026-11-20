@@ -1,28 +1,149 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Container from '../../components/Container.astro';
-import SectionLabel from '../../components/SectionLabel.astro';
-import PipelineStrip from '../../components/PipelineStrip.astro';
-import Placeholder from '../../components/Placeholder.astro';
+import CaseStudy from '../../components/CaseStudy.astro';
+import { url } from '../../lib/url';
+
+const repo = 'https://github.com/Ca15y/Ca15y.github.io';
+
+const summary =
+  'This site is a small DevOps project of its own. Every change goes through a pull request, seven quality gates run in GitHub Actions, and the site deploys to GitHub Pages only when all of them pass.';
+
+const architecture = {
+  caption:
+    'The CI workflow. Lint, type check and build run in parallel; the four checks below the build test the exact files that would be deployed. Deploy needs all seven gates and runs on main only.',
+  tiers: [
+    [{ label: 'pull request', detail: 'or a push to main' }],
+    [
+      { label: 'lint + format', detail: 'ESLint, Prettier' },
+      { label: 'type check', detail: 'astro check, content schemas' },
+      { label: 'build', detail: 'astro build → artifact' },
+    ],
+    [
+      { label: 'HTML + links', detail: 'html-validate, lychee', from: [2] },
+      { label: 'Lighthouse', detail: 'every category ≥ 95', from: [2] },
+      { label: 'axe', detail: 'WCAG 2.1 AA, both themes', from: [2] },
+    ],
+    [{ label: 'deploy to Pages', detail: 'main only, all 7 gates passed', accent: true }],
+  ],
+};
+
+const decisions = [
+  {
+    decision: 'Pin every GitHub Action to a full commit SHA.',
+    why: 'A version tag can be moved to point at different code; a commit SHA cannot. Dependabot updates the pins weekly, with the version kept in a comment.',
+  },
+  {
+    decision: 'Least-privilege permissions in every workflow.',
+    why: 'Workflows default to `contents: read`. Only the deploy job gets `pages: write` and `id-token: write`, and only the weekly link check gets `issues: write`. Checkout runs with `persist-credentials: false`, so the token is not left in the git config.',
+  },
+  {
+    decision: 'Give each gate its own job.',
+    why: 'A red check names exactly what broke, and independent gates run in parallel instead of stopping at the first failure.',
+  },
+  {
+    decision: 'Test the built files, not the source.',
+    why: 'The build is uploaded once as an artifact, and HTML validation, links, Lighthouse and axe all check those same files, which are exactly what deploys.',
+  },
+  {
+    decision: 'Keep a small performance budget.',
+    why: 'No third-party scripts and no analytics. The fonts are self-hosted and cut to the Latin subset (47 KB and 40 KB). There is one stylesheet (5 KB compressed) and no JavaScript files, just two short inline scripts for the theme toggle. Preview images are generated at build time, not by an outside service.',
+  },
+  {
+    decision: 'Skip the deploy until Pages is switched on.',
+    why: 'The deploy job waits for a `PAGES_ENABLED` repository variable, so merges to main stayed green before Pages existed.',
+  },
+];
+
+const next = [
+  'Buy a domain and manage its DNS with Terraform, with remote state.',
+  'Either serve the custom domain from GitHub Pages with HTTPS enforced, or move to S3 and CloudFront provisioned by Terraform and deployed from GitHub Actions with OIDC instead of long-lived AWS keys.',
+  'Write that move up here as the next stage of this case study.',
+];
+
+const stack = [
+  'Astro',
+  'TypeScript',
+  'Tailwind CSS',
+  'GitHub Actions',
+  'GitHub Pages',
+  'ESLint',
+  'Prettier',
+  'html-validate',
+  'lychee',
+  'Lighthouse CI',
+  'Playwright',
+  'axe-core',
+  'Dependabot',
+  'Satori',
+];
 ---
 
-<BaseLayout
-  title="Colophon"
-  description="How this site is built, tested and deployed."
-  og="colophon"
->
-  <Container class="py-16 sm:py-20">
-    <SectionLabel text="cat colophon.md" />
-    <h1 class="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">How this site is built</h1>
-    <p class="mt-4 max-w-[65ch] text-lg text-muted">
-      This site is a DevOps project in its own right. Every pull request runs these gates, and a
-      failing gate blocks the deploy.
-    </p>
-    <div class="mt-8">
-      <PipelineStrip />
-    </div>
-    <div class="mt-12">
-      <Placeholder note="Phase 4: full write-up (pipeline diagram, each gate and why, security choices, performance budget, custom domain plan)." />
-    </div>
-  </Container>
+<BaseLayout title="Colophon" description={summary} og="colophon" ogType="article">
+  <CaseStudy
+    id="colophon"
+    label="cat colophon.md"
+    title="How this site is built"
+    status="Live. This is the site you are reading."
+    summary={summary}
+    headlineFacts={[
+      '7 quality gates on every pull request',
+      'Actions pinned to commit SHAs, least-privilege permissions',
+      'Every gate shown failing on a deliberately broken branch',
+    ]}
+    problem="A portfolio for a DevOps role should show the work, not only describe it. I wanted this site to be built and shipped the way I would ship anything else: from code, through a pipeline, with checks that stop a bad change before it goes live."
+    architecture={architecture}
+    decisions={decisions}
+    next={next}
+    stack={stack}
+    links={[
+      { label: 'Code on GitHub', href: repo },
+      { label: 'Pipeline runs', href: `${repo}/actions/workflows/ci.yml` },
+      { label: 'Gate test results', href: `${repo}/pull/3` },
+    ]}
+    back={{ href: url(), text: 'Home' }}
+  >
+    <ul>
+      <li>
+        <strong>Lint and format.</strong> ESLint with TypeScript and Astro rules, then Prettier.
+        Mistakes and style drift are caught before anyone reviews the change.
+      </li>
+      <li>
+        <strong>Type check.</strong> <code>astro check</code> type-checks every component and
+        validates every content file against its schema, so a case study with a missing field fails
+        here instead of on the live site.
+      </li>
+      <li>
+        <strong>Build.</strong> <code>astro build</code> produces the static site, including the
+        social preview images, the sitemap and <code>robots.txt</code>.
+      </li>
+      <li>
+        <strong>HTML validation.</strong> html-validate checks every built page. The first run
+        caught a<code>div</code> with <code>role="region"</code> that should have been a native
+        <code>section</code>.
+      </li>
+      <li>
+        <strong>Links.</strong> lychee checks every internal link and <code>#anchor</code> against
+        the built files, and every external URL. External pages can break without a commit here, so
+        the same check also runs every Monday and opens an issue if anything is broken.
+      </li>
+      <li>
+        <strong>Lighthouse.</strong> Five pages, three runs each. Performance, accessibility, best
+        practices and SEO must each score 95 or more on the median run.
+      </li>
+      <li>
+        <strong>Accessibility.</strong> Playwright opens every page in the dark and the light theme
+        and runs axe-core against WCAG 2.1 AA. Any violation fails the job.
+      </li>
+      <li>
+        <strong>Deploy.</strong> Only on main, only after all seven gates pass, using the official
+        GitHub Pages actions.
+      </li>
+      <li>
+        <strong>Proof the gates work.</strong> Two draft pull requests broke the site on purpose.
+        One broke everything except the build, and each gate failed on its own break. The other
+        broke the build, and the four checks that depend on it were skipped. Both were closed
+        without merging.
+      </li>
+    </ul>
+  </CaseStudy>
 </BaseLayout>
