@@ -42,7 +42,7 @@ const sectionCls = 'mt-14 scroll-mt-24';
 const pending = 'rounded-md border border-dashed border-line-strong px-5 py-4 text-muted';
 ---
 
-<BaseLayout title={title} description={summary}>
+<BaseLayout title={title} description={summary} og={project.id} ogType="article">
   <Container class="py-16 sm:py-20">
     <a
       href={url('projects/')}
