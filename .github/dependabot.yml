@@ -7,6 +7,12 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    ignore:
+      # TypeScript 7 is paused: @astrojs/check (^5 || ^6) and typescript-eslint (<6.1) don't support
+      # it yet, so npm ci fails before any gate runs (see PR #9). Remove this once both support 7.
+      # Minor and patch TypeScript updates still come through.
+      - dependency-name: typescript
+        update-types: ['version-update:semver-major']
     groups:
       production-dependencies:
         dependency-type: production
