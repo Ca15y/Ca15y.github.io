@@ -7,9 +7,14 @@ interface Props {
   /** Wide card spanning the full grid row. */
   feature?: boolean;
   headingLevel?: 'h2' | 'h3';
+  /**
+   * Wide screens: share row heights with the other cards in the row (CSS subgrid), so titles,
+   * summaries, facts and stack lines line up across cards of different lengths.
+   */
+  align?: boolean;
 }
 
-const { project, feature = false, headingLevel: H = 'h3' } = Astro.props;
+const { project, feature = false, headingLevel: H = 'h3', align = false } = Astro.props;
 const { title, summary, headlineFacts, stack, status } = project.data;
 
 const statusLabel = {
@@ -23,6 +28,8 @@ const statusLabel = {
   class:list={[
     'project-card relative flex flex-col gap-3.5 rounded-md border border-line bg-surface p-6 transition-colors hover:border-line-strong',
     feature && 'md:col-span-full',
+    // On wide screens the card becomes one of three in a row and joins the row's subgrid.
+    align && 'xl:col-span-1 xl:grid xl:row-span-5 xl:grid-rows-subgrid xl:gap-y-3.5',
   ]}
 >
   <div class="flex flex-wrap items-center justify-between gap-2">
@@ -37,7 +44,13 @@ const statusLabel = {
     </a>
   </H>
   <p class="text-muted">{summary}</p>
-  <ul class:list={['grid gap-2', feature && 'sm:grid-cols-[repeat(auto-fit,minmax(14rem,1fr))]']}>
+  <ul
+    class:list={[
+      'grid content-start gap-2',
+      feature && 'sm:grid-cols-[repeat(auto-fit,minmax(14rem,1fr))]',
+      feature && align && 'xl:grid-cols-1',
+    ]}
+  >
     {headlineFacts.map((fact) => (
       <li class="flex gap-2.5 text-[0.9375rem]">
         <span class="font-mono text-accent" aria-hidden="true">
@@ -47,7 +60,7 @@ const statusLabel = {
       </li>
     ))}
   </ul>
-  <p class="mt-auto border-t border-line pt-3.5 font-mono text-[0.8125rem] leading-relaxed text-muted">
+  <p class="mt-auto border-t xl:self-end border-line pt-3.5 font-mono text-[0.8125rem] leading-relaxed text-muted">
     <span class="mr-2 font-medium text-text">stack</span>
     {stack.length > 0 ? stack.join(' · ') : <span class="text-accent">to be confirmed</span>}
   </p>

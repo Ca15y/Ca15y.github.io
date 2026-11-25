@@ -34,14 +34,14 @@ const btnBase =
         </p>
         <h1
           id="hero-heading"
-          class="mt-5 text-[2rem] leading-tight font-semibold tracking-tight text-balance sm:text-5xl lg:text-[2.625rem]"
+          class="mt-5 text-[2rem] leading-tight font-semibold tracking-tight text-balance sm:text-5xl lg:text-[2.625rem] xl:text-[3.25rem]"
         >
           I build cloud infrastructure that lives in code and ships through pipelines, not by hand.
         </h1>
         <p class="mt-6 max-w-[65ch] text-lg text-muted">
-          Computer Science graduate working with AWS, Terraform, Docker, and GitHub Actions. I care
-          about deployments that are repeatable, tested before they go out, and observable once they
-          are running. Working toward SRE and infrastructure engineering.
+          Software engineer working with AWS, Terraform, Docker, and GitHub Actions. I care about
+          deployments that are repeatable, tested before they go out, and observable once they are
+          running. Working toward SRE and infrastructure engineering.
         </p>
         <div class="mt-9 flex flex-wrap gap-3">
           <a
@@ -98,9 +98,9 @@ const btnBase =
     lede="Each one is written up as a case study: the problem, what I built, and the trade-offs."
     more={{ href: url('projects/'), text: 'All case studies' }}
   >
-    <div class="grid gap-4 md:grid-cols-2">
+    <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
       {projects.map((project, i) => (
-        <ProjectCard project={project} feature={i === 0} />
+        <ProjectCard project={project} feature={i === 0} align />
       ))}
     </div>
   </Section>
