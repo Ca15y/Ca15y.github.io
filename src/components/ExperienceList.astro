@@ -12,7 +12,7 @@ import { experience } from '../data/site';
       <div class="min-w-0">
         <h3 class="text-[1.0625rem] font-semibold">{role.title}</h3>
         <p class="mt-0.5 text-[0.9375rem] text-muted">{role.org}</p>
-        <ul class="mt-2.5 grid list-disc gap-1.5 pl-[1.1rem] text-[0.9375rem] text-muted marker:text-line-strong">
+        <ul class="mt-2.5 grid max-w-[80ch] list-disc gap-1.5 pl-[1.1rem] text-[0.9375rem] text-muted marker:text-line-strong">
           {role.points.map((point) => (
             <li>{point}</li>
           ))}

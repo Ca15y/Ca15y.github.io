@@ -46,6 +46,17 @@ const {
   back,
 } = Astro.props;
 
+// Section anchors for the "On this page" list shown beside the article on wide screens.
+const toc = [
+  { id: 'problem', label: 'Problem' },
+  { id: 'architecture', label: 'Architecture' },
+  { id: 'built', label: 'What I built' },
+  { id: 'decisions', label: 'Decisions and trade-offs' },
+  { id: 'next', label: 'What I would do next' },
+  { id: 'stack', label: 'Stack' },
+  { id: 'links', label: 'Links' },
+];
+
 const h2 = 'text-xl font-semibold tracking-tight sm:text-2xl';
 const sectionCls = 'mt-14 scroll-mt-24';
 const pending = 'rounded-md border border-dashed border-line-strong px-5 py-4 text-muted';
@@ -62,110 +73,131 @@ const pending = 'rounded-md border border-dashed border-line-strong px-5 py-4 te
     </a>
   )}
 
-  <article class="max-w-3xl">
-    <header>
-      <SectionLabel text={label} />
-      <h1 class="mt-2 text-3xl font-semibold tracking-tight text-balance sm:text-4xl">{title}</h1>
-      <p class="mt-3 font-mono text-sm text-muted">{status}</p>
-      <p class="mt-5 text-lg">{summary}</p>
-      <ul class="mt-6 grid gap-2" aria-label="Headline facts">
-        {headlineFacts.map((fact) => (
-          <li class="flex gap-2.5">
-            <span class="font-mono text-accent" aria-hidden="true">
-              →
-            </span>
-            {fact}
-          </li>
-        ))}
-      </ul>
-    </header>
-
-    <section aria-labelledby="problem" class={sectionCls}>
-      <h2 id="problem" class={h2}>
-        Problem
-      </h2>
-      <p class="mt-4 text-muted">{problem}</p>
-    </section>
-
-    <section aria-labelledby="architecture" class={sectionCls}>
-      <h2 id="architecture" class={h2}>
-        Architecture
-      </h2>
-      <div class="mt-5">
-        <ArchitectureDiagram id={id} architecture={architecture} />
-      </div>
-    </section>
-
-    <section aria-labelledby="built" class={sectionCls}>
-      <h2 id="built" class={h2}>
-        What I built
-      </h2>
-      <div class="prose-case mt-4">
-        <slot />
-      </div>
-    </section>
-
-    <section aria-labelledby="decisions" class={sectionCls}>
-      <h2 id="decisions" class={h2}>
-        Decisions and trade-offs
-      </h2>
-      {decisions.length > 0 ? (
-        <dl class="mt-4 grid gap-5">
-          {decisions.map((d) => (
-            <div class="border-l-2 border-line-strong pl-4">
-              <dt class="font-medium" set:html={inlineCode(d.decision)} />
-              <dd class="mt-1 text-muted" set:html={inlineCode(d.why)} />
-            </div>
-          ))}
-        </dl>
-      ) : (
-        <p class:list={['mt-4', pending]}>Notes on the trade-offs are being written up.</p>
-      )}
-    </section>
-
-    <section aria-labelledby="next" class={sectionCls}>
-      <h2 id="next" class={h2}>
-        What I would do next
-      </h2>
-      {next.length > 0 ? (
-        <ul class="prose-case mt-4">
-          {next.map((item) => (
-            <li set:html={inlineCode(item)} />
+  <div class="xl:grid xl:grid-cols-[minmax(0,48rem)_minmax(0,1fr)] xl:gap-16">
+    <article class="max-w-3xl">
+      <header>
+        <SectionLabel text={label} />
+        <h1 class="mt-2 text-3xl font-semibold tracking-tight text-balance sm:text-4xl">{title}</h1>
+        <p class="mt-3 font-mono text-sm text-muted">{status}</p>
+        <p class="mt-5 text-lg">{summary}</p>
+        <ul class="mt-6 grid gap-2" aria-label="Headline facts">
+          {headlineFacts.map((fact) => (
+            <li class="flex gap-2.5">
+              <span class="font-mono text-accent" aria-hidden="true">
+                →
+              </span>
+              {fact}
+            </li>
           ))}
         </ul>
-      ) : (
-        <p class:list={['mt-4', pending]}>Next steps are being written up.</p>
-      )}
-    </section>
+      </header>
 
-    <section aria-labelledby="stack" class={sectionCls}>
-      <h2 id="stack" class={h2}>
-        Stack
-      </h2>
-      <ul class="mt-4 flex flex-wrap gap-2 font-mono text-[0.8125rem]">
-        {stack.map((s) => (
-          <li class="rounded border border-line-strong px-2.5 py-1">{s}</li>
-        ))}
-      </ul>
-    </section>
+      <section aria-labelledby="problem" class={sectionCls}>
+        <h2 id="problem" class={h2}>
+          Problem
+        </h2>
+        <p class="mt-4 text-muted">{problem}</p>
+      </section>
 
-    <section aria-labelledby="links" class={sectionCls}>
-      <h2 id="links" class={h2}>
-        Links
-      </h2>
-      <ul class="mt-3 flex flex-wrap gap-x-6 font-mono text-sm">
-        {links.map((l) => (
-          <li>
-            <a
-              class="inline-flex min-h-11 items-center text-accent transition-colors hover:text-text"
-              href={l.href}
-            >
-              {l.label} <span aria-hidden="true">&nbsp;↗</span>
-            </a>
-          </li>
-        ))}
-      </ul>
-      {note && <p class="mt-3 text-sm text-muted">{note}</p>}
-    </section>
-  </article>
+      <section aria-labelledby="architecture" class={sectionCls}>
+        <h2 id="architecture" class={h2}>
+          Architecture
+        </h2>
+        <div class="mt-5">
+          <ArchitectureDiagram id={id} architecture={architecture} />
+        </div>
+      </section>
+
+      <section aria-labelledby="built" class={sectionCls}>
+        <h2 id="built" class={h2}>
+          What I built
+        </h2>
+        <div class="prose-case mt-4">
+          <slot />
+        </div>
+      </section>
+
+      <section aria-labelledby="decisions" class={sectionCls}>
+        <h2 id="decisions" class={h2}>
+          Decisions and trade-offs
+        </h2>
+        {decisions.length > 0 ? (
+          <dl class="mt-4 grid gap-5">
+            {decisions.map((d) => (
+              <div class="border-l-2 border-line-strong pl-4">
+                <dt class="font-medium" set:html={inlineCode(d.decision)} />
+                <dd class="mt-1 text-muted" set:html={inlineCode(d.why)} />
+              </div>
+            ))}
+          </dl>
+        ) : (
+          <p class:list={['mt-4', pending]}>Notes on the trade-offs are being written up.</p>
+        )}
+      </section>
+
+      <section aria-labelledby="next" class={sectionCls}>
+        <h2 id="next" class={h2}>
+          What I would do next
+        </h2>
+        {next.length > 0 ? (
+          <ul class="prose-case mt-4">
+            {next.map((item) => (
+              <li set:html={inlineCode(item)} />
+            ))}
+          </ul>
+        ) : (
+          <p class:list={['mt-4', pending]}>Next steps are being written up.</p>
+        )}
+      </section>
+
+      <section aria-labelledby="stack" class={sectionCls}>
+        <h2 id="stack" class={h2}>
+          Stack
+        </h2>
+        <ul class="mt-4 flex flex-wrap gap-2 font-mono text-[0.8125rem]">
+          {stack.map((s) => (
+            <li class="rounded border border-line-strong px-2.5 py-1">{s}</li>
+          ))}
+        </ul>
+      </section>
+
+      <section aria-labelledby="links" class={sectionCls}>
+        <h2 id="links" class={h2}>
+          Links
+        </h2>
+        <ul class="mt-3 flex flex-wrap gap-x-6 font-mono text-sm">
+          {links.map((l) => (
+            <li>
+              <a
+                class="inline-flex min-h-11 items-center text-accent transition-colors hover:text-text"
+                href={l.href}
+              >
+                {l.label} <span aria-hidden="true">&nbsp;↗</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+        {note && <p class="mt-3 text-sm text-muted">{note}</p>}
+      </section>
+    </article>
+
+    <!-- Wide screens only: fills the space beside the article and lets readers jump to a section. -->
+    <nav aria-label="On this page" class="hidden xl:block">
+      <div class="sticky top-28 border-l border-line pl-5">
+        <p class="font-mono text-[0.8125rem] text-muted">on this page</p>
+        <ul class="mt-3 grid gap-1 text-sm">
+          {toc.map((item) => (
+            <li>
+              <a
+                href={`#${item.id}`}
+                class="inline-flex min-h-8 items-center text-muted no-underline transition-colors hover:text-accent"
+              >
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </nav>
+  </div>
 </Container>
