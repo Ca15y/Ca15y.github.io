@@ -6,7 +6,7 @@ import { url } from '../../lib/url';
 const repo = 'https://github.com/Ca15y/Ca15y.github.io';
 
 const summary =
-  'This site is a small DevOps project of its own. Every change goes through a pull request, seven quality gates run in GitHub Actions, and the site deploys to GitHub Pages only when all of them pass.';
+  'This site is a small DevOps project of its own. Every change goes through a pull request, seven quality gates run in GitHub Actions, and the site deploys to Vercel only when all of them pass.';
 
 const architecture = {
   caption:
@@ -23,7 +23,7 @@ const architecture = {
       { label: 'Lighthouse', detail: 'every category ≥ 95', from: [2] },
       { label: 'axe', detail: 'WCAG 2.1 AA, both themes', from: [2] },
     ],
-    [{ label: 'deploy to Pages', detail: 'main only, all 7 gates passed', accent: true }],
+    [{ label: 'deploy to Vercel', detail: 'main only, all 7 gates passed', accent: true }],
   ],
 };
 
@@ -34,7 +34,7 @@ const decisions = [
   },
   {
     decision: 'Least-privilege permissions in every workflow.',
-    why: 'Workflows default to `contents: read`. Only the deploy job gets `pages: write` and `id-token: write`, and only the weekly link check gets `issues: write`. Checkout runs with `persist-credentials: false`, so the token is not left in the git config.',
+    why: 'Workflows default to `contents: read`, and only the weekly link check gets more (`issues: write`). The deploy needs no GitHub permissions: it authenticates to Vercel with an expiring token, stored as a secret and used in a single step. Checkout runs with `persist-credentials: false`, so the token is not left in the git config.',
   },
   {
     decision: 'Give each gate its own job.',
@@ -49,14 +49,14 @@ const decisions = [
     why: 'No third-party scripts and no analytics. The fonts are self-hosted and cut to the Latin subset (47 KB and 40 KB). There is one stylesheet (5 KB compressed) and no JavaScript files, just two short inline scripts for the theme toggle. Preview images are generated at build time, not by an outside service.',
   },
   {
-    decision: 'Skip the deploy until Pages is switched on.',
-    why: 'The deploy job waits for a `PAGES_ENABLED` repository variable, so merges to main stayed green before Pages existed.',
+    decision: "Deploy with the Vercel CLI from GitHub Actions, not Vercel's Git integration.",
+    why: 'So the seven gates decide what goes live, and the exact build they tested is what deploys. The cost is a stored, expiring Vercel token instead of the keyless OIDC deploy GitHub Pages allowed. This site moved from GitHub Pages to Vercel to get security headers and long-lived caching, which Pages cannot set.',
   },
 ];
 
 const next = [
   'Buy a domain and manage its DNS with Terraform, with remote state.',
-  'Either serve the custom domain from GitHub Pages with HTTPS enforced, or move to S3 and CloudFront provisioned by Terraform and deployed from GitHub Actions with OIDC instead of long-lived AWS keys.',
+  'Either point it at Vercel, with the Vercel project and domain managed by Terraform, or move to S3 and CloudFront provisioned by Terraform and deployed from GitHub Actions with OIDC instead of long-lived AWS keys.',
   'Write that move up here as the next stage of this case study.',
 ];
 
@@ -65,7 +65,7 @@ const stack = [
   'TypeScript',
   'Tailwind CSS',
   'GitHub Actions',
-  'GitHub Pages',
+  'Vercel',
   'ESLint',
   'Prettier',
   'html-validate',
@@ -135,8 +135,9 @@ const stack = [
         and runs axe-core against WCAG 2.1 AA. Any violation fails the job.
       </li>
       <li>
-        <strong>Deploy.</strong> Only on main, only after all seven gates pass, using the official
-        GitHub Pages actions.
+        <strong>Deploy.</strong> Only on main, only after all seven gates pass, with the Vercel CLI.
+        A smoke test then checks the live site: key pages load, missing pages return 404, and all
+        six security headers are present.
       </li>
       <li>
         <strong>Proof the gates work.</strong> Two draft pull requests broke the site on purpose.

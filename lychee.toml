@@ -16,5 +16,5 @@ exclude = [
   '^https://(www\.)?linkedin\.com/',
   # The site's own absolute URLs (canonical links) only exist after a deploy;
   # the same pages are checked as local files.
-  '^https://ca15y\.github\.io/',
+  '^https://ca15y\.vercel\.app/',
 ]

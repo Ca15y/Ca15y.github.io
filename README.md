@@ -1,11 +1,11 @@
-# ca15y.github.io
+# ca15y.vercel.app
 
 [![CI](https://github.com/Ca15y/Ca15y.github.io/actions/workflows/ci.yml/badge.svg)](https://github.com/Ca15y/Ca15y.github.io/actions/workflows/ci.yml)
 [![Scheduled link check](https://github.com/Ca15y/Ca15y.github.io/actions/workflows/link-check.yml/badge.svg)](https://github.com/Ca15y/Ca15y.github.io/actions/workflows/link-check.yml)
 
-My portfolio, at [ca15y.github.io](https://ca15y.github.io): case studies of cloud and DevOps work, experience, labs and skills.
+My portfolio, at [ca15y.vercel.app](https://ca15y.vercel.app): case studies of cloud and DevOps work, experience, labs and skills.
 
-The site is also a small DevOps project in its own right. Every change goes through a pull request, seven quality gates run in GitHub Actions, and the site deploys to GitHub Pages only when all of them pass.
+The site is also a small DevOps project in its own right. Every change goes through a pull request, seven quality gates run in GitHub Actions, and the site deploys to Vercel only when all of them pass.
 
 ## Pipeline
 
@@ -24,7 +24,7 @@ flowchart LR
     Links --> Gate
     LH --> Gate
     Axe --> Gate
-    Gate -->|yes| Deploy[Deploy to GitHub Pages]
+    Gate -->|yes| Deploy[Deploy to Vercel<br/>then smoke test]
     Gate -->|no| Stop[Nothing is deployed]
 ```
 
@@ -72,7 +72,8 @@ Content lives in `src/content/projects/` (case studies) and `src/content/labs/`,
 - **Astro, static output, no client framework.** The site is content, so it ships HTML and CSS. The only JavaScript is a few lines for the theme toggle.
 - **Each gate is its own job.** A failure shows exactly which check broke, and independent gates run in parallel.
 - **Actions pinned to commit SHAs.** A tag can be moved to point at different code; a SHA can't. Dependabot keeps the pins up to date.
-- **Least-privilege permissions.** Workflows default to `contents: read`. Only the deploy job gets `pages: write` and `id-token: write`, and only the scheduled link check gets `issues: write`.
+- **Least-privilege permissions.** Workflows default to `contents: read`; only the scheduled link check gets more (`issues: write`). The deploy authenticates to Vercel with an expiring token stored as a secret and used in a single step.
+- **Deploy with the Vercel CLI, not Vercel's Git integration.** The gates decide what goes live, and the exact tested build is what deploys. The trade-off is a stored token instead of the keyless OIDC deploy GitHub Pages allowed; the move to Vercel was for security headers and long-lived caching (`vercel.json`), which GitHub Pages cannot set.
 - **Deploys only after every gate.** The deploy job needs all seven gates and runs only on main.
 - **One place for the site URL.** `site.config.mjs` holds the URL and base path, so moving to a custom domain is a one-line change.
 - **Self-hosted fonts, no third-party scripts, no analytics.** Fewer requests and nothing tracking visitors.
@@ -81,12 +82,15 @@ Content lives in `src/content/projects/` (case studies) and `src/content/labs/`,
 
 These are set in GitHub, not in code.
 
-**Turn on Pages and deploys**
+**Connect Vercel**
 
-1. Settings → Pages → Build and deployment → Source: **GitHub Actions**.
-2. Settings → Secrets and variables → Actions → Variables → New repository variable: `PAGES_ENABLED` = `true`.
+1. Create the Vercel project without connecting Git: `npx vercel@66.6.0 project create ca15y`.
+2. Create a Vercel token with an expiry date (Vercel → Account Settings → Tokens).
+3. GitHub → Settings → Secrets and variables → Actions:
+   - Secret `VERCEL_TOKEN`: the token.
+   - Variables `VERCEL_PROJECT_ID` (`prj_…`) and `VERCEL_ORG_ID` (the team ID, `team_…`).
 
-The deploy job is skipped until that variable exists, so merges to main stay green before Pages is switched on.
+The deploy job is skipped until `VERCEL_PROJECT_ID` exists. Replace the token before it expires.
 
 **Protect main**
 
@@ -101,4 +105,4 @@ The checks only appear in the list after they have run once on a pull request.
 
 ## Later: custom domain
 
-When there's a domain, DNS will be managed with Terraform with remote state. Either GitHub Pages serves the custom domain with HTTPS enforced, or the site moves to S3 and CloudFront provisioned by Terraform and deployed from GitHub Actions with OIDC instead of long-lived AWS keys.
+When there's a domain, DNS will be managed with Terraform with remote state. Either the domain points at Vercel, with the Vercel project and domain managed by Terraform, or the site moves to S3 and CloudFront provisioned by Terraform and deployed from GitHub Actions with OIDC instead of long-lived AWS keys.
