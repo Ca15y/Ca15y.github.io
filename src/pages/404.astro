@@ -30,6 +30,6 @@ import { url } from '../lib/url';
 </BaseLayout>
 
 <script is:inline>
-  // GitHub Pages serves this file for every missing URL, so read the path at runtime.
+  // The host serves this file for every missing URL, so read the path at runtime.
   document.querySelector('[data-path]').textContent = location.pathname;
 </script>
